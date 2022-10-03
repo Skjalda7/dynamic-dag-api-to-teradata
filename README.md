@@ -1,8 +1,8 @@
 # Dynamic DAG
-## Objective
+## Objective 📝
 Updating database built in Teradata collecting new data from API requests ([AFIP](https://afip.tangofactura.com/Rest/))
 
-## Functionality
+## Functionality ⚙️
 The columns from the table to update are 'CUIT', 'SITUACION_JURIDICA', 'ESTADO', 'NOMBRE_COMPLETO', 'PROVINCIA', 'LOCALIDAD', 'CODIGO_POSTAL', 'DIRECCION', 'FUENTE', 'FECHA_ACTUALIZACION'.
 
 * From database, extracts a list of 'CUIT' numbers with [generador_cuit](https://github.com/Skjalda7/dynamic-dag-api-to-teradata/blob/main/update_funcional%20-%20GH.py#:~:text=def%20generador_cuit()%3A) function. 
