@@ -10,4 +10,4 @@ The columns from the table to update are 'CUIT', 'SITUACION_JURIDICA', 'ESTADO',
 * Finally, the [update_teradata](https://github.com/Skjalda7/dynamic-dag-api-to-teradata/blob/main/update_funcional%20-%20GH.py#:~:text=def%20update_teradata(lista)) function filters and processes every single json from the list saving the useful data and updates the table with them executing an 'UPDATE' query.
 
 ## Graph from Airflow UI 📊
-[graph from airflow ui](https://github.com/Skjalda7/dynamic-dag-api-to-teradata/blob/main/graph.JPG)
+![graph from airflow ui](https://github.com/Skjalda7/dynamic-dag-api-to-teradata/blob/main/graph.JPG)
