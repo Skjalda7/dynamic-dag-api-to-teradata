@@ -30,16 +30,16 @@ def my_dag():
 	@task
 	def generador_cuit():
 		"""
-		Extracts the CUIT values that need update from db and creates an
-		array with 4 lists with them.
+		Extracts 'CUIT' values that needs to be updated from the db 
+		and creates an array with 4 lists with them.
 		:return: array
 		"""
 		conn = BaseHook.get_connection(f'Teradata')
 		con_tera = teradatasql.connect(None,
-									   host=f"111.11.11.11",
-									   user=f"{conn.login}",
-									   password=f"{conn.password}",
-									   column_name='false')
+					       host='localhost',
+					       user=f"{conn.login}",
+					       password=f"{conn.password}",
+					       column_name='false')
 		tsql = con_tera.cursor()
 
 		query = ("SELECT top 500 CUIT TABLE_TO_UPDATE WHERE FUENTE = 'old_data'")
@@ -71,7 +71,7 @@ def my_dag():
 	@task
 	def consulta_afip(listas_cuits):
 		"""
-		:param list for the dynamic iteration
+		:param: list for the dynamic iteration
 		Makes an API call with the list values and save them into a new list.
 		"""
 		class Worker(Thread):
@@ -92,7 +92,7 @@ def my_dag():
 		# Creates the queue and concatenates the number at the end of the url
 		q = queue.Queue()
 		for cuit in listas_cuits:
-			q.put('https://afip.tangofactura.com/Rest/GetContribuyenteFull?cuit=' + re.sub("[^0-9]", "", cuit))
+			q.put({AFIP_URL} + re.sub("[^0-9]", "", cuit))
 
 		# Workers keep working till they receive an empty string
 		no_workers = 8
@@ -126,10 +126,10 @@ def my_dag():
 
 		conn = BaseHook.get_connection(f'Teradata')
 		con_tera = teradatasql.connect(None,
-									   host=f"111.11.11.11",
-									   user=f"{conn.login}",
-									   password=f"{conn.password}",
-									   column_name='false')
+					       host='localhost',
+					       user=f"{conn.login}",
+					       password=f"{conn.password}",
+					       column_name='false')
 
 		tsql = con_tera.cursor()
 
@@ -153,15 +153,15 @@ def my_dag():
 					NOMBRE_COMPLETO = NOMBRE_COMPLETO.replace(comilla, "''")
 
 				query_act = (f"UPDATE TABLE_TO_UPDATE SET DIRECCION = '{DIRECCION}', "
-							 f"SITUACION_JURIDICA = '{SITUACION_JURIDICA}', "
-							 f"ESTADO = '{ESTADO}', "
-							 f"NOMBRE_COMPLETO = '{NOMBRE_COMPLETO}', "
-							 f"PROVINCIA = '{PROVINCIA}', "
-							 f"LOCALIDAD = '{LOCALIDAD}', "
-							 f"CODIGO_POSTAL = '{CODIGO_POSTAL}', "
-							 f"FUENTE = 'AFIP_TANGO_FACTURA', "
-							 f"FECHA_ACTUALIZACION = current_date "
-							 f"WHERE CUIT = '{CUIT}'")
+					     f"SITUACION_JURIDICA = '{SITUACION_JURIDICA}', "
+					     f"ESTADO = '{ESTADO}', "
+					     f"NOMBRE_COMPLETO = '{NOMBRE_COMPLETO}', "
+					     f"PROVINCIA = '{PROVINCIA}', "
+					     f"LOCALIDAD = '{LOCALIDAD}', "
+					     f"CODIGO_POSTAL = '{CODIGO_POSTAL}', "
+					     f"FUENTE = 'AFIP_TANGO_FACTURA', "
+					     f"FECHA_ACTUALIZACION = current_date "
+					     f"WHERE CUIT = '{CUIT}'")
 
 				# This way, Teradata'll ingest the value as NULL and not string:
 				comillas_none = "'None'"
